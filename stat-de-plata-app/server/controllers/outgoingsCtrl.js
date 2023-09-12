@@ -21,7 +21,7 @@ module.exports = db => {
       },
   
       find: (req, res) => {
-        db.query(`SELECT id, id_superior, name, 
+        db.query(`SELECT id, id_superior, name, paragraph, last_child
         FROM "Outgoings"`, { type: db.QueryTypes.SELECT }).then(resp => {
           res.send(resp[0]);
         }).catch(() => res.status(401));
