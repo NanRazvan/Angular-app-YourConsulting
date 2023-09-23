@@ -1,1 +1,51 @@
-<p>salary-config-modal works!</p>
+<div class='modal-header'>
+    <h4 class='modal-title'>{{id_salaryConfig ? 'Modificare' : 'Adăugare'}} configurare salariu</h4>
+</div>
+
+<div class='modal-body'>
+    <div class='form-group row'>
+
+        <label class='col-sm-2 col-form-label'>Denumire*</label>
+        <div class='col-sm-4'>
+            <input type='text' [(ngModel)]='modal.name' class='form-control' placeholder='Denumire...'
+                maxlength='255' />
+
+
+
+        </div>
+
+        <!-- ce e clasificatia econimica?? -->
+        <label class='col-sm-2 col-form-label'>Clasificație economică</label>
+        <div class='col-sm-4'>
+            <input type='number' [(ngModel)]='modal.id_outgoing' class='form-control'
+                placeholder='Clasificație economică...' maxlength='255' />
+        </div>
+    </div>
+
+    <div class='form-group row'>
+        <label class='col-sm-2 col-form-label'>SDP normal</label>
+        <div class='col-sm-2'>
+            <input type='checkbox' [(ngModel)]='modal.normal' class='form-check-input' placeholder='SDP normal...' />
+        </div>
+
+        <label class='col-sm-1 col-form-label'>Total</label>
+        <div class='col-sm-2'>
+            <input type='checkbox' [(ngModel)]='modal.total' class='form-check-input' placeholder='Total...' />
+        </div>
+
+        <label class='col-sm-1 col-form-label'>Categorie*</label>
+        <div class='col-sm-4'>
+            <select [(ngModel)]='modal.category' class='form-control'>
+                <option disabled selected>Select a category</option>
+                <option *ngFor='let item of salaryItems; let i = index ' [ngValue]='i + 1'>{{ item }}</option>
+            </select>
+        </div>
+
+    </div>
+
+</div>
+
+<div class='modal-footer'>
+    <button type='button' class='btn btn-outline-dark' (click)='activeModal.dismiss()'>Renunță</button>
+    <button type='button' class='btn btn-success' (click)='save()'>Salvează</button>
+</div>

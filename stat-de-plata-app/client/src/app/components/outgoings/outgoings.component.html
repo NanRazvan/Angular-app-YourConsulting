@@ -43,8 +43,6 @@
               <th>Nume</th>
               <th width="120px">Paragraf</th>
               <th width="120px">Ultimul nivel</th>
-
-
               <th rowspan='2' width="70px"></th>
 
             </tr>
@@ -58,7 +56,7 @@
                   (input)="onSearchChange()" /></th>
 
               <th><input type="checkbox" [(ngModel)]="trueChecked" class="form-check-input" (change)="onCheckboxChange('true')" />
-                True/False
+                ✓/✗
                 <input type="checkbox" [(ngModel)]="falseChecked" class="form-check-input" (change)="onCheckboxChange('false')" />
               </th>
 
@@ -75,7 +73,11 @@
               <td class="text-center">{{ og.id_superior }}</td>
               <td class="text-center">{{ og.name }}</td>
               <td class="text-center">{{ og.paragraph }}</td>
-              <td class="text-center">{{ og.last_child }}</td>
+              
+              <td class="text-center">
+                <span [class.checked-icon]="og.last_child" [class.unchecked-icon]="!og.last_child"></span>
+              </td>
+
               <td class="text-center">
 
                 <fa-icon class="text-primary" [icon]="faEdit" (click)="addEdit(og.id)" matTooltip="Modificare"

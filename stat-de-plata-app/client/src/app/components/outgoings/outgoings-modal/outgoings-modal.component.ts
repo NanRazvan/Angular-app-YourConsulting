@@ -12,15 +12,33 @@ import { ToastrService } from 'ngx-toastr';
 export class OutgoingsModalComponent implements OnInit {
   @Input() id_outgoing: number | undefined;
   modal = {} as any;
+  outgoingsNotChild: any = [];
 
   constructor(private _spinner: NgxSpinnerService, public activeModal: NgbActiveModal, private toastr: ToastrService) { }
 
   ngOnInit(): void {
 
+
+    this.loadSuperiorNotLastChild();
+
     if (this.id_outgoing) {
+
       this.loadDataById();
+
     }
   }
+
+  loadSuperiorNotLastChild = (): void => {
+    
+    this._spinner.show();
+    axios.get(`/api/outgoings/findNotLastChild`).then(({ data }) => {
+      this.outgoingsNotChild = data;
+
+      this._spinner.hide();
+
+    }).catch(() => this.toastr.error('Eroare la preluarea cheltuielilor in outgoings-modal!'));
+  }
+  
 
   loadDataById = (): void => {
 
@@ -57,11 +75,14 @@ export class OutgoingsModalComponent implements OnInit {
         this.updateData();
       }
       else {
+        if (!this.modal.last_child)
+          this.modal.last_child = false;
+
         this.postData();
       }
-      console.log("Datele urmatoare au fost salvate: ",this.modal);
+      console.log("Datele urmatoare au fost salvate: ", this.modal);
 
-      
+
     }
     else
       console.log("Datele nu au fost salvate");

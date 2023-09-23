@@ -1,0 +1,55 @@
+
+/* Button Styles */
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Table Styles */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+}
+
+.table th, .table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+.table th {
+    background-color: #f0f0f0;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.table .text-primary {
+    margin-right: 10px; 
+}
+
+.checked-icon::before {
+    content: "\2713"; /* Caracter Unicode pentru bifat */
+    color: #00cc00; /* Culoarea pentru bifat */
+  }
+  
+  .unchecked-icon::before {
+    content: "\2717"; /* Caracter Unicode pentru x */
+    color: #ff0000; /* Culoarea pentru x */
+  }
+
+/* Scroll Styles */
+// .view-scroll-outgoing {
+//     max-height: 30vh; 
+//     overflow-y: auto; 
+//   }

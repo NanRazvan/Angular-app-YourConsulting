@@ -42,12 +42,12 @@ export class OutgoingsComponent implements OnInit {
 
       this._spinner.hide();
 
-    }).then(() => console.log("outgoings: ", this.outgoings))
+    })
       .catch(() => this.toastr.error('Eroare la preluarea cheltuieilor din baza de date!'));
   }
 
   addEdit = (id_outgoing?: number): void => {
-
+    
     const modalRef = this._modal.open(OutgoingsModalComponent, { size: 'lg', keyboard: false, backdrop: 'static' });
     modalRef.componentInstance.id_outgoing = id_outgoing;
     modalRef.closed.subscribe(() => {

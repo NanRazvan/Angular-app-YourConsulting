@@ -38,6 +38,15 @@
     margin-right: 10px; 
 }
 
+.checked-icon::before {
+    content: "\2713"; /* Caracter Unicode pentru bifat */
+    color: #00cc00; /* Culoarea pentru bifat */
+  }
+  
+  .unchecked-icon::before {
+    content: "\2717"; /* Caracter Unicode pentru x */
+    color: #ff0000; /* Culoarea pentru x */
+  }
 /* Scroll Styles */
 // .view-scroll-outgoing {
 //     max-height: 30vh; 

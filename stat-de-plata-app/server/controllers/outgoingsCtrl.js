@@ -22,8 +22,17 @@ module.exports = db => {
   
       find: (req, res) => {
         db.query(`SELECT id, id_superior, name, paragraph, last_child
-        FROM "Outgoings"`, { type: db.QueryTypes.SELECT }).then(resp => {
+        FROM "Outgoings"
+        WHERE id = ${req.params.id}`, { type: db.QueryTypes.SELECT }).then(resp => {
           res.send(resp[0]);
+        }).catch(() => res.status(401));
+      },
+
+      findNotLastChild: (req, res) => {
+        db.query(`SELECT id
+        FROM "Outgoings"
+        WHERE last_child = false`, { type: db.QueryTypes.SELECT }).then(resp => {
+          res.send(resp);
         }).catch(() => res.status(401));
       },
   

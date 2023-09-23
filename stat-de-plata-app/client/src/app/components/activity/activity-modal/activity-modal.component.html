@@ -1,1 +1,41 @@
-<p>activity-modal works!</p>
+<div class='modal-header'>
+    <h4 class='modal-title'>{{id_activity ? 'Modificare' : 'Adăugare'}} activitate</h4>
+  </div>
+  
+  <div class='modal-body'>
+    <div class='form-group row'>
+
+      <label class='col-sm-2 col-form-label'>Superior</label>
+    <div class='col-sm-4'>
+      <select [(ngModel)]='modal.id_superior' class='form-control'>
+        <option [ngValue]='null'>Niciun Superior</option>
+        <option *ngFor='let item of activitiesNotChild' [ngValue]='item.id'>{{ item.id }}</option>
+      </select>
+    </div>
+  
+      <label class='col-sm-2 col-form-label'>Nume*</label>
+      <div class='col-sm-4'>
+        <input type='text' [(ngModel)]='modal.name' class='form-control' placeholder='Nume...' maxlength='255' />
+      </div>
+    </div>
+  
+    <div class='form-group row'>
+      <label class='col-sm-2 col-form-label'>Cod*</label>
+      <div class='col-sm-4'>
+        <input type='number' [(ngModel)]='modal.code' class='form-control' placeholder='Cod...' maxlength='20' />
+      </div>
+  
+      <label class='col-sm-2 col-form-label'>Ultimul nivel</label>
+      <div class='col-sm-2'>
+        <input type='checkbox' [(ngModel)]='modal.last_child' class='form-check-input' placeholder='Ultimul nivel...' />
+      </div>
+
+    </div>
+  
+  </div>
+  
+  <div class='modal-footer'>
+    <button type='button' class='btn btn-outline-dark' (click)='activeModal.dismiss()'>Renunță</button>
+    <button type='button' class='btn btn-success' (click)='save()'>Salvează</button>
+  </div>
+  

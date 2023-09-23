@@ -4,6 +4,8 @@ module.exports = app => {
   const activityCtrl = require('../controllers/activityCtrl')(app.locals.db);
   const router          = express.Router();
 
+  router.get('/findNotLastChild', activityCtrl.findNotLastChild);
+
   router.post('/', activityCtrl.create);
   router.put('/', activityCtrl.update);
   router.get('/', activityCtrl.findAll);

@@ -21,9 +21,18 @@ module.exports = db => {
       },
   
       find: (req, res) => {
-        db.query(`SELECT id, name
-        FROM "Activity"`, { type: db.QueryTypes.SELECT }).then(resp => {
+        db.query(`SELECT id, name, code, last_child
+        FROM "Activity"
+        WHERE id = ${req.params.id}`, { type: db.QueryTypes.SELECT }).then(resp => {
           res.send(resp[0]);
+        }).catch(() => res.status(401));
+      },
+
+      findNotLastChild: (req, res) => {
+        db.query(`SELECT id
+        FROM "Activity"
+        WHERE last_child = false`, { type: db.QueryTypes.SELECT }).then(resp => {
+          res.send(resp);
         }).catch(() => res.status(401));
       },
   
