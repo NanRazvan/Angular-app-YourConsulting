@@ -13,7 +13,7 @@ module.exports = db => {
       },
   
       findAll: (req, res) => {
-        db.query(`SELECT id, name, code, last_child
+        db.query(`SELECT *
         FROM "Activity"
         ORDER BY id`, { type: db.QueryTypes.SELECT }).then(resp => {
           res.send(resp);
@@ -21,7 +21,7 @@ module.exports = db => {
       },
   
       find: (req, res) => {
-        db.query(`SELECT id, name, code, last_child
+        db.query(`SELECT id, id_superior ,name, code, last_child
         FROM "Activity"
         WHERE id = ${req.params.id}`, { type: db.QueryTypes.SELECT }).then(resp => {
           res.send(resp[0]);
@@ -37,10 +37,31 @@ module.exports = db => {
       },
   
       destroy: (req, res) => {
-        db.query(`DELETE FROM "Activity" WHERE id = ${req.params.id}`, { type: db.QueryTypes.DELETE }).then(() => {
-          res.send({ success: true });
-        }).catch(() => res.status(401));
+        const activityIdToDelete = req.params.id;
+      
+        
+        db.query(`
+          SELECT 1
+          FROM "Salary"
+          WHERE "id_activity" = ${activityIdToDelete}
+          LIMIT 1
+        `, { type: db.QueryTypes.SELECT })
+          .then((result) => {
+            if (result && result.length > 0) {
+              
+              res.status(400).send({ success: false, error: 'Activitate prezenta intr un stat de palta' });
+            } else {
+              
+              db.query(`DELETE FROM "Activity" WHERE id = ${activityIdToDelete}`, { type: db.QueryTypes.DELETE })
+                .then(() => {
+                  res.send({ success: true });
+                })
+                .catch(() => res.status(401));
+            }
+          })
+          .catch(() => res.status(401));
       }
+      
     };
   };
   

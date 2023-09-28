@@ -21,7 +21,7 @@ module.exports = db => {
       },
   
       find: (req, res) => {
-        db.query(`SELECT id, name, normal,category
+        db.query(`SELECT id, name, normal,total, category
         FROM "SalaryConfig"
         WHERE id = ${req.params.id}`, { type: db.QueryTypes.SELECT }).then(resp => {
           res.send(resp[0]);

@@ -2,7 +2,7 @@ module.exports = (sequelize, DataType) => {
     let model = sequelize.define('SalaryData', {
 
         id_salary: {
-            type: DataType.TEXT
+            type: DataType.INTEGER
         },
         id_salary_config: {
             type: DataType.INTEGER
@@ -11,13 +11,13 @@ module.exports = (sequelize, DataType) => {
             type: DataType.BOOLEAN
         },
         clerk: {
-            type: DataType.TEXT
+            type: DataType.INTEGER
         },
         contract: {
-            type: DataType.TEXT
+            type: DataType.INTEGER
         },
         others: {
-            type: DataType.TEXT
+            type: DataType.INTEGER
         }
 
     }, {

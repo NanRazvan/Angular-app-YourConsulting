@@ -6,7 +6,6 @@ module.exports = app => {
   const errors       = require('./errors');
 
   /* LOGIN */
-  app.use('/api/information', require('./routes/information')(app));
   app.use('/api/outgoings', require('./routes/outgoings')(app));
   app.use('/api/activity', require('./routes/activity')(app));
   app.use('/api/salary', require('./routes/salary')(app));

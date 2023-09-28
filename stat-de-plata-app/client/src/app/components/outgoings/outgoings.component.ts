@@ -47,7 +47,7 @@ export class OutgoingsComponent implements OnInit {
   }
 
   addEdit = (id_outgoing?: number): void => {
-    
+
     const modalRef = this._modal.open(OutgoingsModalComponent, { size: 'lg', keyboard: false, backdrop: 'static' });
     modalRef.componentInstance.id_outgoing = id_outgoing;
     modalRef.closed.subscribe(() => {
@@ -96,38 +96,39 @@ export class OutgoingsComponent implements OnInit {
 
   onCheckboxChange(checkedCheckbox: string): void {
     if (checkedCheckbox === 'true' && this.trueChecked) {
-      
+
       this.falseChecked = false;
-    } 
+    }
     if (checkedCheckbox === 'false' && this.falseChecked) {
-      
+
       this.trueChecked = false;
     }
     this.filterData();
   }
-  
-  
+
+
 
   filterData(): void {
     this.filteredOutgoings = this.outgoings.filter((outgoing: {
       id_superior: number | undefined;
       name: string;
-      paragraph: number;
+      paragraph: string;
       last_child: boolean | undefined;
     }) => {
       const idSuperiorMatch = !this.superiorSearch || outgoing.id_superior?.toString().includes(this.superiorSearch);
       const nameMatch = !this.nameSearch || outgoing.name.toLowerCase().includes(this.nameSearch.toLowerCase());
-      const paragraphMatch = !this.paragraphSearch || outgoing.paragraph.toString().includes(this.paragraphSearch);
+      const paragraphMatch = !this.paragraphSearch || outgoing.paragraph.toLowerCase().includes(this.paragraphSearch.toLowerCase());
+      
       const lastChildMatch = (this.trueChecked && outgoing.last_child === true) ||
-                           (this.falseChecked && outgoing.last_child === false) ||
-                           (!this.trueChecked && !this.falseChecked);
-  
+        (this.falseChecked && outgoing.last_child === false) ||
+        (!this.trueChecked && !this.falseChecked);
+
       return idSuperiorMatch && nameMatch && paragraphMatch && lastChildMatch;
     });
   }
-  
-  
-  
+
+
+
 
   onSearchChange(): void {
     this.filterData();

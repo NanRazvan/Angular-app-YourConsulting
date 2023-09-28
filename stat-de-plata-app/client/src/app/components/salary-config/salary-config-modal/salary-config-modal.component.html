@@ -9,16 +9,14 @@
         <div class='col-sm-4'>
             <input type='text' [(ngModel)]='modal.name' class='form-control' placeholder='Denumire...'
                 maxlength='255' />
-
-
-
         </div>
 
-        <!-- ce e clasificatia econimica?? -->
         <label class='col-sm-2 col-form-label'>Clasificație economică</label>
         <div class='col-sm-4'>
-            <input type='number' [(ngModel)]='modal.id_outgoing' class='form-control'
-                placeholder='Clasificație economică...' maxlength='255' />
+            <select [(ngModel)]='modal.id_outgoing' class='form-control'>
+                <option disabled selected>Selectati cheltuiala</option>
+                <option *ngFor='let item of outgoings ' [ngValue]='item.id'>{{ item.paragraph }}</option>
+            </select>
         </div>
     </div>
 
@@ -31,6 +29,8 @@
         <label class='col-sm-1 col-form-label'>Total</label>
         <div class='col-sm-2'>
             <input type='checkbox' [(ngModel)]='modal.total' class='form-check-input' placeholder='Total...' />
+          
+
         </div>
 
         <label class='col-sm-1 col-form-label'>Categorie*</label>

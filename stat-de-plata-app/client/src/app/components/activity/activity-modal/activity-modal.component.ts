@@ -29,13 +29,9 @@ export class ActivityModalComponent implements OnInit {
     
     this._spinner.show();
     axios.get(`/api/activity/findNotLastChild`).then(({ data }) => {
-      console.log("am intrat pe loadSuperiorNotLastChild ");
+      
       this.activitiesNotChild = data;
-
       this._spinner.hide();
-  
-      console.log("aici", this.activitiesNotChild);
-
     }).catch(() => this.toastr.error('Eroare la preluarea activitatilor last_child in outgoings-modal!'));
   }
 

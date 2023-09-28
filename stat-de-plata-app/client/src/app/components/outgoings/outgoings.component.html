@@ -40,8 +40,8 @@
 
               <th rowspan='2' width="70px">Nr. Crt.</th>
               <th width="170px">Superior</th>
-              <th>Nume</th>
               <th width="120px">Paragraf</th>
+              <th>Nume</th>
               <th width="120px">Ultimul nivel</th>
               <th rowspan='2' width="70px"></th>
 
@@ -50,9 +50,9 @@
 
               <th><input [(ngModel)]="superiorSearch" class='form-control input-xs' placeholder='Caută superior...'
                   (input)="onSearchChange()" /></th>
-              <th><input [(ngModel)]="nameSearch" class='form-control input-xs' placeholder='Caută nume...'
-                  (input)="onSearchChange()" /></th>
               <th><input [(ngModel)]="paragraphSearch" class='form-control input-xs' placeholder='Caută paragraf...'
+                  (input)="onSearchChange()" /></th>
+              <th><input [(ngModel)]="nameSearch" class='form-control input-xs' placeholder='Caută nume...'
                   (input)="onSearchChange()" /></th>
 
               <th><input type="checkbox" [(ngModel)]="trueChecked" class="form-check-input" (change)="onCheckboxChange('true')" />
@@ -71,8 +71,8 @@
               class="cursor-pointer ">
               <td class="text-center">{{ i + 1 }}</td>
               <td class="text-center">{{ og.id_superior }}</td>
-              <td class="text-center">{{ og.name }}</td>
               <td class="text-center">{{ og.paragraph }}</td>
+              <td class="text-center">{{ og.name }}</td>
               
               <td class="text-center">
                 <span [class.checked-icon]="og.last_child" [class.unchecked-icon]="!og.last_child"></span>

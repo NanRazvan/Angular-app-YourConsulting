@@ -9,11 +9,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { ToastrModule } from 'ngx-toastr';
-
+import { DatePipe } from '@angular/common';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
-import { InformationComponent } from './components/information/information.component';
-import { InformationModalComponent } from './components/information/information-modal/information-modal.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { MatTooltipModule, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 import { OutgoingsComponent } from './components/outgoings/outgoings.component';
@@ -23,13 +21,12 @@ import { SalaryComponent } from './components/salary/salary.component';
 import { OutgoingsModalComponent } from './components/outgoings/outgoings-modal/outgoings-modal.component';
 import { ActivityModalComponent } from './components/activity/activity-modal/activity-modal.component';
 import { SalaryConfigModalComponent } from './components/salary-config/salary-config-modal/salary-config-modal.component';
+import { SalaryModalComponent } from './components/salary/salary-modal/salary-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    InformationComponent,
-    InformationModalComponent,
     ConfirmDialogComponent,
     OutgoingsComponent,
     ActivityComponent,
@@ -37,7 +34,8 @@ import { SalaryConfigModalComponent } from './components/salary-config/salary-co
     SalaryComponent,
     OutgoingsModalComponent,
     ActivityModalComponent,
-    SalaryConfigModalComponent
+    SalaryConfigModalComponent,
+    SalaryModalComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +59,8 @@ import { SalaryConfigModalComponent } from './components/salary-config/salary-co
     })
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [{ provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: { disableTooltipInteractivity: true } }],
-  bootstrap: [AppComponent]
+  providers: [DatePipe, { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: { disableTooltipInteractivity: true } }],
+  bootstrap: [AppComponent],
+
 })
 export class AppModule { }

@@ -30,7 +30,6 @@ module.exports = function getModels(sequelize, Sequelize) {
 
   const arr = [
     /************************ Information *********************/
-    {path: __dirname + '/information.js', sync: true},
     {path: __dirname + '/outgoings.js', sync: true},
     {path: __dirname + '/activity.js', sync: true},
     {path: __dirname + '/salary.js', sync: true},

@@ -20,16 +20,16 @@ export class SalaryConfigComponent implements OnInit {
   salaryConfigs: any[] = [];
   filteredSalaryConfigs: any[] = [];
   limit: number = 70;
-  
+
   nameSearch: any;
 
 
   normalSearch: undefined;
   totalSearch: undefined;
-  categorySearch: any; 
+  categorySearch: any;
   clasEconSearch: any;
 
-
+  totals: any[] = [];
 
 
   constructor(private _modal: NgbModal, private _spinner: NgxSpinnerService, private toastr: ToastrService) { }
@@ -47,8 +47,44 @@ export class SalaryConfigComponent implements OnInit {
 
       this._spinner.hide();
 
-    }).then(() => console.log("salary configs: ", this.salaryConfigs))
+    }).then(() => this.loadOutgoingsParapraph())
+      .then(() => this.totalAndNonTotal())
+      .then(() => console.log("totals: ", this.totals))
+      .then(() => console.log("salary configs: ", this.salaryConfigs))
       .catch(() => this.toastr.error('Eroare la preluarea salary-config urilor din baza de date!'));
+  }
+
+  get salaryConfigsNotInTotals(): any[] {
+    return this.filteredSalaryConfigs.filter(sc =>
+      !this.totals.some(t => t.category === sc.category)
+    );
+  }
+
+  totalAndNonTotal() {
+
+    this.totals = this.salaryConfigs.filter(item => item.total === true);
+    this.salaryConfigs = this.salaryConfigs.filter(item => item.total === false);
+    this.filteredSalaryConfigs = this.salaryConfigs;
+  }
+
+  loadOutgoingsParapraph() { //and get totals
+
+    for (const salaryConfig of this.salaryConfigs) {
+      if (salaryConfig.id_outgoing) {
+
+        this._spinner.show();
+        const id_outgoing = salaryConfig.id_outgoing;
+
+        axios.get(`/api/outgoings/${id_outgoing}`).then(({ data }) => {
+
+          salaryConfig.id_outgoingParagraph = data.paragraph;
+
+          this._spinner.hide();
+        })
+          .catch(() => this.toastr.error('Eroare la preluarea cheltuielilor in salary-config'));
+      }
+    }
+
   }
 
   addEdit = (id_salaryConfig?: number): void => {
@@ -101,37 +137,32 @@ export class SalaryConfigComponent implements OnInit {
 
   onCheckboxChange(checkedCheckbox: string): void {
     if (checkedCheckbox === 'true' && this.trueCheckedNormal) {
-      
+
       this.falseCheckedNormal = false;
-    } 
+    }
     if (checkedCheckbox === 'false' && this.falseCheckedNormal) {
-      
+
       this.trueCheckedNormal = false;
     }
     this.filterData();
   }
-  
-  
+
+
 
   filterData(): void {
     this.filteredSalaryConfigs = this.salaryConfigs.filter((salaryConfig: {
       name: string;
       category: string;
       normal: boolean | undefined;
-      
+      id_outgoingParagraph: string;
     }) => {
-     
+
       const nameMatch = !this.nameSearch || salaryConfig.name.toLowerCase().includes(this.nameSearch.toLowerCase());
-      const clasEconMatch = !this.clasEconSearch || salaryConfig.category.toLowerCase().includes(this.clasEconSearch.toLowerCase());
-     // clasEcon nu e bine facut
-    
 
-
+      const clasEconMatch = !this.clasEconSearch || (salaryConfig.id_outgoingParagraph && salaryConfig.id_outgoingParagraph.toLowerCase().includes(this.clasEconSearch.toLowerCase()));
       const normalMatch = (this.trueCheckedNormal && salaryConfig.normal === true) ||
-                           (this.falseCheckedNormal && salaryConfig.normal === false) ||
-                           (!this.trueCheckedNormal && !this.falseCheckedNormal);
-      
-      
+        (this.falseCheckedNormal && salaryConfig.normal === false) ||
+        (!this.trueCheckedNormal && !this.falseCheckedNormal);
 
       return nameMatch && clasEconMatch && normalMatch;
     });

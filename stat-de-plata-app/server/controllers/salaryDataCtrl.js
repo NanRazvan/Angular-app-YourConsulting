@@ -13,7 +13,7 @@ module.exports = db => {
       },
   
       findAll: (req, res) => {
-        db.query(`SELECT id, id_salary, id_salary_config, total, clerk, contract, others
+        db.query(`SELECT *
         FROM "SalaryData"
         ORDER BY id`, { type: db.QueryTypes.SELECT }).then(resp => {
           res.send(resp);
@@ -21,10 +21,10 @@ module.exports = db => {
       },
   
       find: (req, res) => {
-        db.query(`SELECT id, id_salary, id_salary_config
+        db.query(`SELECT *
         FROM "SalaryData"
-        WHERE id = ${req.params.id}`, { type: db.QueryTypes.SELECT }).then(resp => {
-          res.send(resp[0]);
+        WHERE id_salary = ${req.params.id}`, { type: db.QueryTypes.SELECT }).then(resp => {
+          res.send(resp);
         }).catch(() => res.status(401));
       },
   

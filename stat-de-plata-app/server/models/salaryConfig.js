@@ -13,7 +13,7 @@ module.exports = (sequelize, DataType) => {
         total: {
             type: DataType.BOOLEAN
         },
-        category: { //  NU STIU INCA CE TIP
+        category: { 
             type: DataType.INTEGER
         }
     }, {

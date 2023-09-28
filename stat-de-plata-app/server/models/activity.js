@@ -3,6 +3,9 @@ module.exports = (sequelize, DataType) => {
       name: {
         type: DataType.TEXT
       },
+      id_superior: {
+        type: DataType.INTEGER
+      },
       code: {
         type: DataType.TEXT
       },

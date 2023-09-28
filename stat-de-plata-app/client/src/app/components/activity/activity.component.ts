@@ -23,6 +23,7 @@ export class ActivityComponent implements OnInit {
   nameSearch: any;
   lastChildSearch: undefined;
   codeSearch: any;
+  superiorSearch: any;
 
 
 
@@ -42,7 +43,7 @@ export class ActivityComponent implements OnInit {
       this._spinner.hide();
 
     }).then(() => console.log("activities: ", this.activities))
-      .catch(() => this.toastr.error('Eroare la preluarea cheltuieilor din baza de date!'));
+      .catch(() => this.toastr.error('Eroare la preluarea activitatilor din baza de date!'));
   }
 
   addEdit = (id_activity?: number): void => {
@@ -64,7 +65,15 @@ export class ActivityComponent implements OnInit {
 
         this.toastr.success('Activitatea a fost ștearsă cu succes!');
         this.loadData();
-      }).catch(() => this.toastr.error('Eroare la ștergerea activitatii!'));
+
+      })
+        .catch((response) => {
+          //Nu stiu cum sa ajjung la status
+          if (response.status === 400)
+            this.toastr.error('Activitatea prezenta intr un stat de plata!')
+          else
+            this.toastr.error('Eroare la ștergerea activitatii!')
+        });
     });
   }
 
@@ -95,36 +104,40 @@ export class ActivityComponent implements OnInit {
 
   onCheckboxChange(checkedCheckbox: string): void {
     if (checkedCheckbox === 'true' && this.trueChecked) {
-      
+
       this.falseChecked = false;
-    } 
+    }
     if (checkedCheckbox === 'false' && this.falseChecked) {
-      
+
       this.trueChecked = false;
     }
     this.filterData();
   }
-  
-  
+
+
 
   filterData(): void {
     this.filteredActivities = this.activities.filter((activity: {
       name: string;
       code: string;
       last_child: boolean | undefined;
+      id_superior: number | undefined;
+
     }) => {
+      const idSuperiorMatch = !this.superiorSearch || activity.id_superior?.toString().includes(this.superiorSearch);
+
       const nameMatch = !this.nameSearch || activity.name.toLowerCase().includes(this.nameSearch.toLowerCase());
-      const codeMatch =  !this.codeSearch || activity.name.toLowerCase().includes(this.codeSearch.toLowerCase());
+      const codeMatch = !this.codeSearch || activity.code.toLowerCase().includes(this.codeSearch.toLowerCase());
       const lastChildMatch = (this.trueChecked && activity.last_child === true) ||
-                           (this.falseChecked && activity.last_child === false) ||
-                           (!this.trueChecked && !this.falseChecked);
-  
-      return nameMatch && codeMatch && lastChildMatch;
+        (this.falseChecked && activity.last_child === false) ||
+        (!this.trueChecked && !this.falseChecked);
+
+      return nameMatch && codeMatch && lastChildMatch && idSuperiorMatch;
     });
   }
-  
-  
-  
+
+
+
 
   onSearchChange(): void {
     this.filterData();

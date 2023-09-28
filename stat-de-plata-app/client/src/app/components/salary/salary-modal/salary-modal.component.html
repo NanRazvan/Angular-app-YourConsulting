@@ -1,0 +1,143 @@
+<div class='modal-header'>
+  <h4 class='modal-title'>{{id_salary ? 'Modificare' : 'Adăugare'}} salariu</h4>
+</div>
+
+<div class='modal-body'>
+  <div class='form-group row'>
+    <label class='col-sm-1 col-form-label'>Clasif.funct.</label>
+
+    <div class='col-sm-3'>
+      <select [(ngModel)]='modal.id_activity' class='form-control'(input)="onActivityChange()">
+        <option [ngValue]='null'>Nicio activitate</option>
+        <option *ngFor='let item of activities' [ngValue]='item.id' >{{ item.name }}</option>
+      </select>
+    </div>
+
+    <label class='col-sm-1 col-form-label'>Denumire</label>
+    <div class='col-sm-3'>
+      <input type='text' [(ngModel)]='modal.name' class='form-control' placeholder='Nume...' maxlength='255' />
+    </div>
+
+    <label class='col-sm-1 col-form-label'>Luna</label>
+    <div class="col-sm-1">
+      <select [(ngModel)]="modal.month" class="form-control">
+        <option value="" disabled selected>Selecteaza luna...</option>
+        <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+      </select>
+    </div>
+
+    <label class='col-sm-1 col-form-label'>Obligatie plata</label>
+    <div class="col-sm-1">
+      <input type="date" [(ngModel)]="modal.obligation_date" class="form-control" placeholder="Select a date..." />
+    </div>
+
+  </div>
+
+  <div class='form-group row'>
+
+    <label class='col-sm-1 col-form-label'>Avansuri</label>
+    <div class="col-sm-2">
+      <input type="date" [(ngModel)]="modal.advances_date" class="form-control" placeholder="Select a date..." />
+    </div>
+
+    <label class='col-sm-1 col-form-label'>Virament</label>
+    <div class="col-sm-2">
+      <input type="date" [(ngModel)]="modal.date" class="form-control" placeholder="Select a date..." />
+    </div>
+
+    <label class='col-sm-1 col-form-label'>Numerar</label>
+
+    <div class="col-sm-2">
+      <input type="date" [(ngModel)]="modal.cash_date" class="form-control" placeholder="Select a date..." />
+    </div>
+
+    <label class='col-sm-1 col-form-label'>Contributii</label>
+    <div class="col-sm-2">
+      <input type="date" [(ngModel)]="modal.contributions_date" class="form-control" placeholder="Select a date..." />
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ------------------------------ -->
+
+<div style="height: 400px; overflow: auto;">
+  <table class="table  table-hover">
+    <thead class="table-bordered">
+      <tr>
+        <th>Denumire</th>
+        <th width="100px">Clasificație economică (cheltuială)</th>
+        <th rowspan='2' width="100px">Total</th>
+        <th rowspan='2' width="100px">Functionari publici</th>
+        <th rowspan='2' width="100px">Contractuali</th>
+        <th rowspan='2' width="100px">Alte categorii</th>
+
+      </tr>
+
+      <tr>
+
+        <th><input [(ngModel)]="nameSearch" class='form-control input-xs' placeholder='Caută denumire...'
+            (input)="onSearchChange()" /></th>
+
+        <th><input [(ngModel)]="clasEconSearch" class='form-control input-xs' placeholder='Caută clas. ec. ...'
+            (input)="onSearchChange()" /></th>
+      </tr>
+    </thead>
+
+
+    <tbody>
+      <ng-container *ngFor="let item of totals">
+        <tr *ngFor="let sc of filteredSalaryConfigs.slice(0, limit)" class="cursor-pointer ">
+
+          <ng-container *ngIf="sc.category === item.category">
+ 
+            <td class="text-center">{{ sc.name }}</td>
+            <td class="text-center">{{ sc.id_outgoingParagraph }}</td>
+
+            <td class="column-background" class="text-center" >{{ sc.clerk + sc.contract + sc.others}}</td>
+
+            <td class="text-center">
+              <input type="number" [(ngModel)]="sc.clerk" (input)="onCellChange(sc)">
+            </td>
+            <td class="text-center">
+              <input type="number" [(ngModel)]="sc.contract" (input)="onCellChange(sc)">
+            </td>
+            <td class="text-center">
+              <input type="number" [(ngModel)]="sc.others" (input)="onCellChange(sc)">
+            </td>
+  
+          </ng-container>
+
+        </tr>
+
+        <tr class="row_background">
+          <td class="text-bold">{{ item.name }}</td>
+          <td></td>
+          <td class ="column-background" class="text-center" >{{ item.clerk + item.contract + item.others}}</td>
+          <td>{{ item.clerk }}</td>
+          <td>{{ item.contract}}</td>
+          <td>{{item.others}}</td>
+        </tr>
+
+      </ng-container>
+
+      <tr *ngFor="let sc of salaryConfigsNotInTotals" class="cursor-pointer ">
+        <td class="text-center">{{ sc.name }}</td>
+        <td class="text-center">{{ sc.id_outgoingParagraph }}</td>
+        <td class="text-center">
+          <span [class.checked-icon]="sc.normal" [class.unchecked-icon]="!sc.normal"></span>
+        </td>
+      </tr>
+
+    </tbody>
+
+  </table>
+</div>
+<!-- ------------------------------------------- -->
+
+<div class='modal-footer'>
+  <button type='button' class='btn btn-outline-dark' (click)='activeModal.dismiss()'>Renunță</button>
+  <button type='button' class='btn btn-success' (click)='save()'>Salvează</button>
+</div>

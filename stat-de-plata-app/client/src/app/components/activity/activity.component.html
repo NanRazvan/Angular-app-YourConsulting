@@ -39,6 +39,7 @@
             <tr>
 
               <th rowspan='2' width="70px">Nr. Crt.</th>
+              <th width="170px">Superior</th>
               <th>Nume</th>
               <th width="120px">Cod</th>
               <th width="120px">Ultimul nivel</th>
@@ -48,7 +49,8 @@
 
             </tr>
             <tr>
-
+              <th><input [(ngModel)]="superiorSearch" class='form-control input-xs' placeholder='Caută superior...'
+                (input)="onSearchChange()" /></th>
               <th><input [(ngModel)]="nameSearch" class='form-control input-xs' placeholder='Caută nume...'
                   (input)="onSearchChange()" /></th>
               <th><input [(ngModel)]="codeSearch" class='form-control input-xs' placeholder='Caută cod...'
@@ -70,6 +72,7 @@
             <tr (dblclick)="addEdit(activity.id)" *ngFor="let activity of filteredActivities.slice(0, limit); let i = index"
               class="cursor-pointer ">
               <td class="text-center">{{ i + 1 }}</td>
+              <td class="text-center">{{ activity.id_superior }}</td>
               <td class="text-center">{{ activity.name }}</td>
               <td class="text-center">{{ activity.code }}</td>
               <td class="text-center">

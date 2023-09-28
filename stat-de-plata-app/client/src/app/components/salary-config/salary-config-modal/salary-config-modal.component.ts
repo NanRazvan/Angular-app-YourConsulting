@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 export class SalaryConfigModalComponent implements OnInit {
   @Input() id_salaryConfig: number | undefined;
   modal = {} as any;
+  outgoings: any[] = [];
 
   salaryItems: string[] = [
     "Drepturi salariale in bani",
@@ -30,11 +31,11 @@ export class SalaryConfigModalComponent implements OnInit {
   ngOnInit(): void {
 
     if (this.id_salaryConfig) {
-
       this.loadDataById();
-
     }
-    console.log("ngOnInit", this.modal);
+    
+    this.loadOutgoings();
+    console.log("cheltuieli:",this.outgoings);
   }
 
   loadDataById = (): void => {
@@ -46,6 +47,16 @@ export class SalaryConfigModalComponent implements OnInit {
     }).catch(() => this.toastr.error('Eroare la preluarea salary-configurilor in salary-config-modal!'));
 
   }
+
+  loadOutgoings =(): void => {
+    this._spinner.show();
+    axios.get('/api/outgoings').then(({ data }) => {
+      this.outgoings = data;
+      this._spinner.hide();
+    })
+      .catch(() => this.toastr.error('Eroare la preluarea cheltuieilor in salary config - modal din baza de date!'));
+  }
+
 
   postData = (): void => {
     axios.post('/api/salaryConfig', this.modal).then(() => {
