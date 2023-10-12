@@ -25,6 +25,7 @@ module.exports = function initPg(config) {
       timezone: '+03:00'
     });
 
+    
     sequelize.authenticate().then(() => {
       const db = require('../models')(sequelize, Sequelize);
       resolve(db);

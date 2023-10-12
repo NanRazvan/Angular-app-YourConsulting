@@ -2,8 +2,13 @@ module.exports = (sequelize, DataType) => {
     let model = sequelize.define('SalaryData', {
 
         id_salary: {
-            type: DataType.INTEGER
-        },
+            type: DataType.INTEGER,
+            references: {
+              model: 'Salary', 
+              key: 'id',       
+            },
+            onDelete: 'CASCADE',
+          },
         id_salary_config: {
             type: DataType.INTEGER
         },
@@ -24,6 +29,6 @@ module.exports = (sequelize, DataType) => {
         timestamps: true
     });
 
-
+    
     return model;
 };

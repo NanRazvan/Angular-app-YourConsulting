@@ -68,7 +68,7 @@ export class ActivityComponent implements OnInit {
 
       })
         .catch((response) => {
-          //Nu stiu cum sa ajjung la status
+          //Nu stiu cum sa ajung la status
           if (response.status === 400)
             this.toastr.error('Activitatea prezenta intr un stat de plata!')
           else

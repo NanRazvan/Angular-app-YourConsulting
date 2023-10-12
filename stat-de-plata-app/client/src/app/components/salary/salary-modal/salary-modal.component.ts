@@ -49,7 +49,11 @@ export class SalaryModalComponent implements OnInit {
 
     this._spinner.show();
     axios.get('/api/salaryConfig').then(({ data }) => {
-
+      for (const config of data) {
+        config.clerk = 0;
+        config.contract = 0;
+        config.others = 0;
+      }
       this.salaryConfigs = data;
       this.filteredSalaryConfigs = data;
 
@@ -78,7 +82,7 @@ export class SalaryModalComponent implements OnInit {
         const id_outgoing = salaryConfig.id_outgoing;
 
         axios.get(`/api/outgoings/${id_outgoing}`).then(({ data }) => {
-
+          
           salaryConfig.id_outgoingParagraph = data.paragraph;
 
           this._spinner.hide();
@@ -121,16 +125,16 @@ export class SalaryModalComponent implements OnInit {
     console.log("onScrollTop Function ...")
 
   }
-  groupSalariesByMonth(salaries: any[]): { [month: string]: any[] } {
-    return salaries.reduce((acc, salary) => {
-      const month = salary.month;
-      if (!acc[month]) {
-        acc[month] = [];
-      }
-      acc[month].push(salary);
-      return acc;
-    }, {});
-  }
+  // groupSalariesByMonth(salaries: any[]): { [month: string]: any[] } {
+  //   return salaries.reduce((acc, salary) => {
+  //     const month = salary.month;
+  //     if (!acc[month]) {
+  //       acc[month] = [];
+  //     }
+  //     acc[month].push(salary);
+  //     return acc;
+  //   }, {});
+  // }
 
   loadDataById = (): void => {
 

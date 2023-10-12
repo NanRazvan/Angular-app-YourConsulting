@@ -1,5 +1,6 @@
 module.exports = db => {
     return {
+
       create: async (req, res) => {
         try {
           const createdSalary = await db.models.Salary.create(req.body);
@@ -103,25 +104,37 @@ module.exports = db => {
         }).catch(() => res.status(401));
       },
   
-      destroy: (req, res) => {
-        const salaryIdToDelete = req.params.id;
+      // destroy: (req, res) => {
       
-        db.query(`
-          DELETE FROM "SalaryData"
-          WHERE "id_salary" IN (
-            SELECT id FROM "Salary" WHERE id = ${req.params.id}
-          );
+      //   db.query(`
+      //     DELETE FROM "SalaryData"
+      //     WHERE "id_salary" IN (
+      //       SELECT id FROM "Salary" WHERE id = ${req.params.id}
+      //     );
           
-          DELETE FROM "Salary" WHERE id = ${req.params.id};
-        `, { type: db.QueryTypes.DELETE })
-          .then(() => {
+      //     DELETE FROM "Salary" WHERE id = ${req.params.id};
+      //   `, { type: db.QueryTypes.DELETE })
+      //     .then(() => {
+      //       res.send({ success: true });
+      //     })
+      //     .catch((error) => {
+      //       console.error('Error deleting Salary and SalaryData:', error);
+      //       res.status(500).send({ success: false, error: 'An error occurred while deleting Salary and SalaryData.' });
+      //     });
+      // }
+
+      destroy: (req, res) => {
+        db.models.Salary.destroy({
+            where: { id: req.params.id },
+        })
+        .then(() => {
             res.send({ success: true });
-          })
-          .catch((error) => {
-            console.error('Error deleting Salary and SalaryData:', error);
-            res.status(500).send({ success: false, error: 'An error occurred while deleting Salary and SalaryData.' });
-          });
-      }
+        })
+        .catch((error) => {
+            console.error('Error deleting Salary:', error);
+            res.status(500).send({ success: false, error: 'An error occurred while deleting Salary.' });
+        });
+    }
     };
   };
   
