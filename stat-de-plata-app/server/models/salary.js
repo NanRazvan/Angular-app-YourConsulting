@@ -31,13 +31,6 @@ module.exports = (sequelize, DataType) => {
     }, {
         timestamps: true
     });
-
-    // Salary.associate = (models) => {
-    //     Salary.hasMany(models.SalaryData, {
-    //       foreignKey: 'id_salary',
-    //       onDelete: 'CASCADE',
-    //     });
-    //   };
     
 
 return model;

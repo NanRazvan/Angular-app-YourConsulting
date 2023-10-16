@@ -96,7 +96,10 @@
             <td class="text-center">{{ sc.name }}</td>
             <td class="text-center">{{ sc.id_outgoingParagraph }}</td>
 
-            <td class="column-background" class="text-center" >{{ sc.clerk + sc.contract + sc.others}}</td>
+            <!-- <td class="column-background" class="text-center" >{{ sc.clerk + sc.contract + sc.others}}</td> -->
+            <td class="column-background text-center">
+              {{ (sc.clerk || sc.contract || sc.others) ? (sc.clerk + sc.contract + sc.others) : '' }}
+            </td>
 
             <td class="text-center">
               <input type="number" [(ngModel)]="sc.clerk" (input)="onCellChange(sc)">
@@ -115,10 +118,13 @@
         <tr class="row_background">
           <td class="text-bold">{{ item.name }}</td>
           <td></td>
-          <td class ="column-background" class="text-center" >{{ item.clerk + item.contract + item.others}}</td>
-          <td>{{ item.clerk }}</td>
-          <td>{{ item.contract}}</td>
-          <td>{{item.others}}</td>
+          <!-- <td class ="column-background" class="text-center" >{{ item.clerk + item.contract + item.others}}</td> -->
+          <td class="column-background text-center">
+            {{ (item.clerk || item.contract || item.others) ? (item.clerk + item.contract + item.others) : '' }}
+          </td>
+          <td>{{ item.clerk !== 0 ? item.clerk : '' }}</td>
+          <td>{{ item.contract !== 0 ? item.contract : '' }}</td>
+          <td>{{ item.others !== 0 ? item.others : '' }}</td>
         </tr>
 
       </ng-container>

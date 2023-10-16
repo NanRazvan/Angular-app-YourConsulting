@@ -56,26 +56,35 @@ export class ActivityComponent implements OnInit {
     console.log("Add/Edit Function ...")
   }
 
+
   delete = (activity: any): void => {
     const modalRef = this._modal.open(ConfirmDialogComponent, { size: 'lg', keyboard: false, backdrop: 'static' });
     modalRef.componentInstance.title = `Ștergere cheltuiala`;
     modalRef.componentInstance.content = `<p class='text-center mt-1 mb-1'>Doriți să ștergeți activitatea având numele: <b>${activity.name}</b>?`;
     modalRef.closed.subscribe(() => {
-      axios.delete(`/api/activity/${activity.id}`).then(() => {
-
-        this.toastr.success('Activitatea a fost ștearsă cu succes!');
-        this.loadData();
-
-      })
-        .catch((response) => {
-          //Nu stiu cum sa ajung la status
-          if (response.status === 400)
-            this.toastr.error('Activitatea prezenta intr un stat de plata!')
-          else
-            this.toastr.error('Eroare la ștergerea activitatii!')
+      
+      axios.get(`/api/salary/findActivity/${activity.id}`)
+        .then(response => {
+          const hasMatchingRecords = response.data; 
+          if (hasMatchingRecords.length != 0) {
+            this.toastr.warning('Nu puteți șterge activitatea deoarece există înregistrări legate de această activitate intr un stat de plata.');
+          } else {
+            axios.delete(`/api/activity/${activity.id}`)
+              .then(() => {
+                this.toastr.success('Activitatea a fost ștearsă cu succes!');
+                this.loadData();
+              })
+              .catch(() => {
+                this.toastr.error('Eroare la ștergerea activității!');
+              });
+          }
+        })
+        .catch(() => {
+          this.toastr.error('Eroare la verificarea activității!');
         });
     });
   }
+  
 
   showTopButton(): void {
     if (document.getElementsByClassName('view-scroll-activity')[0].scrollTop > 500) {

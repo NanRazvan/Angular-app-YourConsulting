@@ -3,6 +3,8 @@ module.exports = app => {
     const express         = require('express');
     const salaryCtrl = require('../controllers/salaryCtrl')(app.locals.db);
     const router          = express.Router();
+
+    router.get('/findActivity/:id', salaryCtrl.findActivity);
   
     router.post('/', salaryCtrl.create);
     router.put('/', salaryCtrl.update);

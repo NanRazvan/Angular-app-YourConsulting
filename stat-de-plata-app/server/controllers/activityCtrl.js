@@ -38,29 +38,13 @@ module.exports = db => {
   
       destroy: (req, res) => {
         const activityIdToDelete = req.params.id;
-      
-        
-        db.query(`
-          SELECT 1
-          FROM "Salary"
-          WHERE "id_activity" = ${activityIdToDelete}
-          LIMIT 1
-        `, { type: db.QueryTypes.SELECT })
-          .then((result) => {
-            if (result && result.length > 0) {
-              
-              res.status(400).send({ success: false, error: 'Activitate prezenta intr un stat de palta' });
-            } else {
-              
+    
               db.query(`DELETE FROM "Activity" WHERE id = ${activityIdToDelete}`, { type: db.QueryTypes.DELETE })
                 .then(() => {
                   res.send({ success: true });
                 })
-                .catch(() => res.status(401));
-            }
-          })
-          .catch(() => res.status(401));
-      }
+                .catch(() => res.status(400));
+          },
       
     };
   };

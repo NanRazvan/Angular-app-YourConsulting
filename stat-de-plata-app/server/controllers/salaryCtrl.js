@@ -7,29 +7,19 @@ module.exports = db => {
           const elementsToCreate = [];
       
           for (const element of req.body.tableElements) {
-            if ((element.clerk !== 0 || element.others !== 0 || element.contract !== 0) &&
-                (element.clerk || element.others || element.contract)) {
-
               element.id_salary_config = element.id;
               element.id_salary = createdSalary.id;
               delete element.id;
               elementsToCreate.push(element);
-            }
           }
 
           for (const total of req.body.totals) {
-            if ((total.clerk !== 0 || total.others !== 0 || total.contract !== 0) &&
-                (total.clerk || total.others || total.contract)) {
-
               total.id_salary_config = total.id;
               total.id_salary = createdSalary.id;
               delete total.id;
               elementsToCreate.push(total);
-            }
           }
           
-
-          console.log("elements to create",elementsToCreate);
           await db.models.SalaryData.bulkCreate(elementsToCreate);
       
           res.send({ success: true });
@@ -41,7 +31,7 @@ module.exports = db => {
       },
   
       update: async (req, res) => {
-        const { id, tableElements, totals } = req.body;
+        const { id, tableElements, totals, invalidData } = req.body;
       
         try {
           
@@ -51,33 +41,44 @@ module.exports = db => {
           const elementsToUpdate = [];
       
           for (const element of tableElements) {
-            if (
-              (element.clerk !== 0 || element.others !== 0 || element.contract !== 0) &&
-              (element.clerk || element.others || element.contract)
-            ) {
-              const { id: elementId, ...elementData } = element;
-              elementsToUpdate.push({ ...elementData, id_salary: id, id_salary_config: elementId });
-            }
+            const { id: elementId, ...elementData } = element;
+            elementsToUpdate.push({ ...elementData, id_salary: id, id_salary_config: elementId });
           }
       
           for (const total of totals) {
-            if (
-              (total.clerk !== 0 || total.others !== 0 || total.contract !== 0) &&
-              (total.clerk || total.others || total.contract)
-            ) {
-              const { id: totalId, ...totalData } = total;
-              elementsToUpdate.push({ ...totalData, id_salary: id, id_salary_config: totalId });
-            }
+            const { id: totalId, ...totalData } = total;
+            elementsToUpdate.push({ ...totalData, id_salary: id, id_salary_config: totalId });
           }
-      
-        
+         
+          for (const invalidElement of invalidData) {
+            await db.models.SalaryData.destroy({
+              where: {
+                id_salary: id,
+                id_salary_config: invalidElement.id,
+              },
+            });
+          }
+
           for (const updateData of elementsToUpdate) {
-            await db.models.SalaryData.update(updateData, {
+            const existingElement = await db.models.SalaryData.findOne({
               where: {
                 id_salary: id,
                 id_salary_config: updateData.id_salary_config,
               },
             });
+          
+            if (existingElement) {
+              
+              await db.models.SalaryData.update(updateData, {
+                where: {
+                  id_salary: id,
+                  id_salary_config: updateData.id_salary_config,
+                },
+              });
+            } else {
+              console.log(updateData);
+              await db.models.SalaryData.create(updateData);
+            }
           }
       
           res.send({ success: true });
@@ -103,25 +104,22 @@ module.exports = db => {
           res.send(resp[0]);
         }).catch(() => res.status(401));
       },
-  
-      // destroy: (req, res) => {
+
+      findActivity: (req, res) => {
       
-      //   db.query(`
-      //     DELETE FROM "SalaryData"
-      //     WHERE "id_salary" IN (
-      //       SELECT id FROM "Salary" WHERE id = ${req.params.id}
-      //     );
+        db.query(`SELECT id
+        FROM "Salary" 
+        WHERE id_activity = ${req.params.id}`, { type: db.QueryTypes.SELECT })
+        .then(resp => {
           
-      //     DELETE FROM "Salary" WHERE id = ${req.params.id};
-      //   `, { type: db.QueryTypes.DELETE })
-      //     .then(() => {
-      //       res.send({ success: true });
-      //     })
-      //     .catch((error) => {
-      //       console.error('Error deleting Salary and SalaryData:', error);
-      //       res.status(500).send({ success: false, error: 'An error occurred while deleting Salary and SalaryData.' });
-      //     });
-      // }
+          if (resp) {
+            res.send(resp);
+          } else {
+            res.status(404).send("No data found");
+          }
+        })
+          .catch(() => res.status(401));
+      },
 
       destroy: (req, res) => {
         db.models.Salary.destroy({

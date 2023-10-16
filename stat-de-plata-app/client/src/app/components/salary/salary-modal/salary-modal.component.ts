@@ -61,8 +61,6 @@ export class SalaryModalComponent implements OnInit {
 
     }).then(() => this.loadOutgoingsParapraph())
       .then(() => this.totalAndNonTotal())
-      .then(() => console.log("totals: ", this.totals))
-      .then(() => console.log("salary configs: ", this.salaryConfigs))
       .catch(() => this.toastr.error('Eroare la preluarea salary-config urilor din baza de date in salary component!'));
   }
 
@@ -125,17 +123,6 @@ export class SalaryModalComponent implements OnInit {
     console.log("onScrollTop Function ...")
 
   }
-  // groupSalariesByMonth(salaries: any[]): { [month: string]: any[] } {
-  //   return salaries.reduce((acc, salary) => {
-  //     const month = salary.month;
-  //     if (!acc[month]) {
-  //       acc[month] = [];
-  //     }
-  //     acc[month].push(salary);
-  //     return acc;
-  //   }, {});
-  // }
-
   loadDataById = (): void => {
 
     this._spinner.show();
@@ -165,14 +152,19 @@ export class SalaryModalComponent implements OnInit {
   save(): void {
 
     if (this.validate()) {
+
+      this.filterUpdateData();
       this._spinner.show();
 
       if (this.id_salary) {
+
         this.modal.tableElements = this.filteredSalaryConfigs;
         this.modal.totals = this.totals;
         this.updateData();
+
       }
       else {
+
         this.modal.tableElements = this.filteredSalaryConfigs;
         this.modal.totals = this.totals;
         this.postData();
@@ -183,12 +175,52 @@ export class SalaryModalComponent implements OnInit {
       console.log("Datele nu au fost salvate");
   }
 
+  filterUpdateData(): void {
+
+    const validTotals = [];
+    const invalidTotals = [];
+    for (const total of this.totals) {
+      if (
+        (total.clerk !== 0 && total.clerk !== null) ||
+        (total.contract !== 0 && total.contract !== null) ||
+        (total.others !== 0 && total.others !== null)
+      ) {
+        validTotals.push(total);
+      } else {
+        invalidTotals.push(total);
+      }
+    }
+  
+    const validSalaryConfigs = [];
+    const invalidSalaryConfigs = [];
+    for (const salaryConfig of this.filteredSalaryConfigs) {
+      if (
+        (salaryConfig.clerk !== 0 && salaryConfig.clerk !== null) ||
+        (salaryConfig.contract !== 0 && salaryConfig.contract !== null) ||
+        (salaryConfig.others !== 0 && salaryConfig.others !== null)
+      ) {
+        validSalaryConfigs.push(salaryConfig);
+      } else {
+        invalidSalaryConfigs.push(salaryConfig);
+      }
+    }
+  
+    
+    this.modal.invalidData =  [...invalidTotals, ...invalidSalaryConfigs];
+    
+    this.totals = validTotals;
+    this.filteredSalaryConfigs = validSalaryConfigs;
+
+    console.log("totals", this.totals);
+    console.log("filteredsalary", this.filteredSalaryConfigs);
+    console.log("invalidData", this.modal.invalidData);
+
+  }
+  
 
   getSalaryData(id_salary: any) {
     this._spinner.show();
     axios.get(`/api/salaryData/${id_salary}`).then(({ data }) => {
-      console.log("data", data)
-      console.log("totals",this.totals)
       for (const element of data) {
 
         this.totals.forEach((item) => {
